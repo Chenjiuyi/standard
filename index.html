@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>💍 陈志鹏 & 李晓敏 婚礼邀请函</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&family=Ma+Shan+Zheng&display=swap');
+
+    :root {
+      --sdv-green: #4a7c3f;
+      --sdv-gold: #e8c54a;
+      --sdv-light: #f5e8c0;
+      --sdv-brown: #7a5c3a;
+      --sdv-dark: #2a1a0a;
+      --sdv-pink: #e86a8a;
+      --sdv-sky: #7ec8e3;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html, body {
+      min-height: 100vh;
+      background: #1a0e05;
+      font-family: 'Ma Shan Zheng', 'ZCOOL KuaiLe', cursive, sans-serif;
+      overflow-x: hidden;
+    }
+
+    /* 像素风背景 */
+    body {
+      background-image:
+        repeating-linear-gradient(0deg, transparent, transparent 31px, rgba(255,255,200,0.03) 31px, rgba(255,255,200,0.03) 32px),
+        repeating-linear-gradient(90deg, transparent, transparent 31px, rgba(255,255,200,0.03) 31px, rgba(255,255,200,0.03) 32px);
+    }
+
+    /* ===== 星星粒子 ===== */
+    .stars-container {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+    .star {
+      position: absolute;
+      width: 4px; height: 4px;
+      background: var(--sdv-gold);
+      image-rendering: pixelated;
+      animation: twinkle 2s infinite alternate;
+    }
+    .star::before {
+      content: '✦';
+      color: var(--sdv-gold);
+      font-size: 10px;
+      position: absolute;
+      top: -3px; left: -3px;
+    }
+    @keyframes twinkle {
+      from { opacity: 0.2; transform: scale(0.8); }
+      to   { opacity: 1;   transform: scale(1.2); }
+    }
+
+    /* ===== 主容器 ===== */
+    .wrapper {
+      position: relative;
+      z-index: 1;
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 16px;
+    }
+
+    /* ===== 邀请函卡片 ===== */
+    .invite-card {
+      background: linear-gradient(180deg, #2e1f08 0%, #3d2a0f 30%, #2e1f08 100%);
+      border: 4px solid var(--sdv-gold);
+      box-shadow:
+        0 0 0 2px var(--sdv-brown),
+        0 0 0 6px var(--sdv-gold),
+        0 0 30px rgba(232, 197, 74, 0.3),
+        inset 0 0 60px rgba(0,0,0,0.4);
+      padding: 0;
+      overflow: hidden;
+    }
+
+    /* ===== 顶部横幅 ===== */
+    .top-banner {
+      background: linear-gradient(180deg, #1a3a1a 0%, #2a5a2a 50%, #1a3a1a 100%);
+      border-bottom: 4px solid var(--sdv-gold);
+      padding: 20px 10px 16px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* 农场像素场景 */
+    .farm-scene {
+      width: 100%;
+      height: 120px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      gap: 4px;
+      padding: 0 8px;
+      position: relative;
+    }
+
+    /* 用 emoji 和 CSS 构建像素场景 */
+    .scene-img {
+      width: 100%;
+      text-align: center;
+      font-size: 0;
+      line-height: 0;
+    }
+
+    /* ===== SVG 像素插图区 ===== */
+    .pixel-art-banner {
+      width: 100%;
+      height: 130px;
+      display: block;
+    }
+
+    /* ===== 标题区 ===== */
+    .title-section {
+      background: var(--sdv-dark);
+      padding: 24px 20px 20px;
+      text-align: center;
+      border-bottom: 3px solid var(--sdv-brown);
+    }
+
+    .invite-label {
+      font-size: 13px;
+      color: var(--sdv-gold);
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    .names-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .groom-name, .bride-name {
+      font-size: clamp(26px, 7vw, 38px);
+      font-weight: bold;
+      line-height: 1.1;
+      text-shadow: 2px 2px 0 var(--sdv-dark), 0 0 20px currentColor;
+    }
+    .groom-name { color: #7ec8e3; }
+    .bride-name { color: #f5a0c0; }
+
+    .heart-connector {
+      font-size: 32px;
+      animation: heartbeat 1.2s ease-in-out infinite;
+      filter: drop-shadow(0 0 8px var(--sdv-pink));
+    }
+    @keyframes heartbeat {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.3); }
+    }
+
+    .pixel-divider {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin: 14px 0 0;
+    }
+    .pixel-divider .line {
+      flex: 1;
+      height: 2px;
+      background: repeating-linear-gradient(90deg, var(--sdv-gold) 0px, var(--sdv-gold) 6px, transparent 6px, transparent 12px);
+    }
+    .pixel-divider .diamond {
+      width: 10px; height: 10px;
+      background: var(--sdv-gold);
+      transform: rotate(45deg);
+    }
+
+    /* ===== 信息板块 ===== */
+    .info-section {
+      padding: 24px 24px 20px;
+      background: rgba(0,0,0,0.2);
+    }
+
+    .info-block {
+      background: rgba(74, 124, 63, 0.15);
+      border: 2px solid var(--sdv-green);
+      border-left: 5px solid var(--sdv-green);
+      padding: 14px 16px;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      box-shadow: inset 0 0 20px rgba(74,124,63,0.1);
+    }
+
+    .info-block.date-block {
+      border-color: var(--sdv-gold);
+      border-left-color: var(--sdv-gold);
+      background: rgba(232, 197, 74, 0.12);
+    }
+    .info-block.loc-block {
+      border-color: var(--sdv-pink);
+      border-left-color: var(--sdv-pink);
+      background: rgba(232, 106, 138, 0.12);
+    }
+
+    .info-icon {
+      font-size: 28px;
+      flex-shrink: 0;
+      image-rendering: pixelated;
+      filter: drop-shadow(1px 1px 0 rgba(0,0,0,0.8));
+    }
+
+    .info-content {
+      flex: 1;
+    }
+
+    .info-label {
+      font-size: 11px;
+      color: #aaa;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+      display: block;
+    }
+
+    .info-value {
+      font-size: clamp(18px, 5vw, 22px);
+      color: var(--sdv-light);
+      font-weight: bold;
+      line-height: 1.3;
+    }
+
+    .info-sub {
+      font-size: 13px;
+      color: #c0a878;
+      margin-top: 4px;
+    }
+
+    /* ===== 中间装饰 ===== */
+    .mid-deco {
+      text-align: center;
+      padding: 8px 24px 0;
+    }
+    .mermaid-pendant {
+      display: inline-block;
+      padding: 10px 20px;
+      background: rgba(126, 200, 227, 0.1);
+      border: 2px solid var(--sdv-sky);
+      color: var(--sdv-sky);
+      font-size: 13px;
+      letter-spacing: 1px;
+      font-style: italic;
+    }
+
+    /* ===== 主体内容 ===== */
+    .body-section {
+      padding: 20px 24px;
+      border-top: 2px solid var(--sdv-brown);
+    }
+
+    .letter-text {
+      color: var(--sdv-light);
+      font-size: 16px;
+      line-height: 1.9;
+      text-align: center;
+      text-indent: 2em;
+    }
+
+    .highlight {
+      color: var(--sdv-gold);
+      font-size: 18px;
+    }
+
+    /* ===== 游戏风格的像素卡片 ===== */
+    .item-cards {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin: 20px 0;
+    }
+
+    .item-card {
+      background: rgba(0,0,0,0.4);
+      border: 2px solid var(--sdv-brown);
+      padding: 12px 10px;
+      text-align: center;
+      position: relative;
+      cursor: default;
+      transition: transform 0.1s, box-shadow 0.1s;
+    }
+    .item-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 0 var(--sdv-brown);
+    }
+
+    /* 品质角标 */
+    .item-card::after {
+      content: attr(data-quality);
+      position: absolute;
+      bottom: 4px; right: 4px;
+      width: 16px; height: 16px;
+      border-radius: 50%;
+      font-size: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .item-card[data-quality="★"]::after {
+      background: #b87333; /* copper */
+    }
+    .item-card[data-quality="★★"]::after {
+      background: #9e9e9e; /* silver */
+    }
+    .item-card[data-quality="★★★"]::after {
+      background: #ffd700; /* gold */
+    }
+    .item-card[data-quality="💎"]::after {
+      background: linear-gradient(135deg, #ff6cf6, #4fc3f7, #69ff69);
+    }
+
+    .item-card .emoji {
+      font-size: 32px;
+      display: block;
+      margin-bottom: 6px;
+      image-rendering: pixelated;
+    }
+    .item-card .item-name {
+      font-size: 13px;
+      color: var(--sdv-light);
+      font-weight: bold;
+    }
+    .item-card .item-desc {
+      font-size: 11px;
+      color: #8a7560;
+      margin-top: 3px;
+    }
+
+    /* ===== 底部 CTA ===== */
+    .cta-section {
+      padding: 0 24px 24px;
+      text-align: center;
+    }
+
+    .rsvp-box {
+      background: linear-gradient(135deg, rgba(74,124,63,0.3), rgba(42,90,42,0.3));
+      border: 3px solid var(--sdv-green);
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 0 20px rgba(74,124,63,0.2);
+    }
+
+    .rsvp-title {
+      font-size: 18px;
+      color: var(--sdv-gold);
+      margin-bottom: 10px;
+      letter-spacing: 2px;
+    }
+
+    .rsvp-text {
+      font-size: 14px;
+      color: #c0b090;
+      line-height: 1.7;
+    }
+
+    .pixel-btn {
+      display: inline-block;
+      margin-top: 14px;
+      padding: 12px 28px;
+      background: var(--sdv-green);
+      color: #fff;
+      font-family: inherit;
+      font-size: 16px;
+      letter-spacing: 2px;
+      border: none;
+      cursor: pointer;
+      box-shadow: 4px 4px 0 #2a4a2a, inset 1px 1px 0 rgba(255,255,255,0.2);
+      text-decoration: none;
+      image-rendering: pixelated;
+      transition: all 0.05s;
+      position: relative;
+    }
+    .pixel-btn:hover {
+      transform: translate(2px, 2px);
+      box-shadow: 2px 2px 0 #2a4a2a;
+    }
+    .pixel-btn:active {
+      transform: translate(4px, 4px);
+      box-shadow: none;
+    }
+
+    /* ===== 底部署名 ===== */
+    .footer-sign {
+      border-top: 3px solid var(--sdv-brown);
+      padding: 20px 24px;
+      text-align: center;
+      background: rgba(0,0,0,0.3);
+    }
+
+    .sign-names {
+      font-size: clamp(16px, 5vw, 22px);
+      color: var(--sdv-gold);
+      margin-bottom: 8px;
+    }
+
+    .sign-date {
+      font-size: 13px;
+      color: #8a7560;
+      letter-spacing: 1px;
+    }
+
+    .junimo-row {
+      display: flex;
+      justify-content: center;
+      gap: 6px;
+      margin-top: 14px;
+      font-size: 20px;
+    }
+    .junimo {
+      animation: junimo-bounce 1s ease-in-out infinite;
+    }
+    .junimo:nth-child(2) { animation-delay: 0.15s; }
+    .junimo:nth-child(3) { animation-delay: 0.30s; }
+    .junimo:nth-child(4) { animation-delay: 0.45s; }
+    .junimo:nth-child(5) { animation-delay: 0.60s; }
+    @keyframes junimo-bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
+    }
+
+    /* ===== 浮动花瓣 ===== */
+    .petals-container {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+    .petal {
+      position: absolute;
+      top: -20px;
+      font-size: 14px;
+      animation: fall linear infinite;
+      opacity: 0.7;
+    }
+    @keyframes fall {
+      0%   { transform: translateY(-20px) rotate(0deg); opacity: 0; }
+      10%  { opacity: 0.8; }
+      90%  { opacity: 0.6; }
+      100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+    }
+
+    /* ===== 像素角落装饰 ===== */
+    .corner-deco {
+      position: absolute;
+      width: 20px; height: 20px;
+    }
+    .corner-deco.tl { top: 4px; left: 4px; border-top: 3px solid var(--sdv-gold); border-left: 3px solid var(--sdv-gold); }
+    .corner-deco.tr { top: 4px; right: 4px; border-top: 3px solid var(--sdv-gold); border-right: 3px solid var(--sdv-gold); }
+    .corner-deco.bl { bottom: 4px; left: 4px; border-bottom: 3px solid var(--sdv-gold); border-left: 3px solid var(--sdv-gold); }
+    .corner-deco.br { bottom: 4px; right: 4px; border-bottom: 3px solid var(--sdv-gold); border-right: 3px solid var(--sdv-gold); }
+
+    /* ===== 进场动画 ===== */
+    .invite-card {
+      animation: card-appear 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+    }
+    @keyframes card-appear {
+      from { opacity: 0; transform: scale(0.9) translateY(20px); }
+      to   { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    /* ===== 手机适配 ===== */
+    @media (max-width: 400px) {
+      .wrapper { padding: 8px; }
+      .invite-card { border-width: 3px; }
+      .info-section, .body-section, .cta-section, .footer-sign { padding-left: 16px; padding-right: 16px; }
+      .item-cards { grid-template-columns: 1fr 1fr; gap: 8px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- 星星背景 -->
+<div class="stars-container" id="starsContainer"></div>
+<!-- 花瓣背景 -->
+<div class="petals-container" id="petalsContainer"></div>
+
+<div class="wrapper">
+  <div class="invite-card">
+
+    <!-- ===== 顶部农场场景 ===== -->
+    <div class="top-banner">
+      <!-- 像素风 SVG 农场场景 -->
+      <svg class="pixel-art-banner" viewBox="0 0 600 130" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges">
+        <!-- 天空 -->
+        <rect x="0" y="0" width="600" height="80" fill="#1a2a3a"/>
+        <!-- 月亮 -->
+        <rect x="520" y="12" width="20" height="20" fill="#f5e8a0"/>
+        <rect x="524" y="10" width="12" height="2" fill="#f5e8a0"/>
+        <rect x="518" y="14" width="2" height="12" fill="#f5e8a0"/>
+        <rect x="540" y="14" width="2" height="12" fill="#f5e8a0"/>
+        <rect x="524" y="32" width="12" height="2" fill="#f5e8a0"/>
+        <!-- 星星 -->
+        <rect x="50" y="15" width="4" height="4" fill="#fff"/>
+        <rect x="48" y="17" width="8" height="1" fill="#fff"/>
+        <rect x="52" y="13" width="1" height="8" fill="#fff"/>
+        <rect x="150" y="25" width="3" height="3" fill="#fff" opacity="0.7"/>
+        <rect x="250" y="10" width="4" height="4" fill="#f5e8a0" opacity="0.8"/>
+        <rect x="340" y="20" width="3" height="3" fill="#fff" opacity="0.6"/>
+        <rect x="420" y="8"  width="4" height="4" fill="#fff"/>
+        <!-- 远山 -->
+        <polygon points="0,80 80,40 160,80" fill="#2a3a2a"/>
+        <polygon points="80,80 200,30 320,80" fill="#1e2e1e"/>
+        <polygon points="200,80 360,25 520,80" fill="#2a3a2a"/>
+        <polygon points="400,80 520,35 600,80" fill="#1e2e1e"/>
+        <!-- 地面 -->
+        <rect x="0" y="80" width="600" height="50" fill="#3a5a2a"/>
+        <!-- 草坪图案 -->
+        <rect x="0"   y="80" width="600" height="4" fill="#4a7a3a"/>
+        <!-- 道路 -->
+        <rect x="240" y="84" width="120" height="46" fill="#8a6a3a"/>
+        <rect x="246" y="84" width="108" height="46" fill="#7a5a2a"/>
+        <!-- 道路纹理 -->
+        <rect x="294" y="90" width="12" height="4"  fill="#8a6a3a"/>
+        <rect x="294" y="102" width="12" height="4" fill="#8a6a3a"/>
+        <rect x="294" y="114" width="12" height="4" fill="#8a6a3a"/>
+        <!-- 左侧房子 -->
+        <rect x="30" y="50" width="60" height="40" fill="#6a4a2a"/>
+        <rect x="25" y="40" width="70" height="15" fill="#8a2a1a"/>
+        <rect x="20" y="36" width="80" height="8"  fill="#6a1a0a"/>
+        <rect x="48" y="68" width="16" height="22" fill="#3a2010"/>
+        <rect x="38" y="56" width="12" height="12" fill="#7ec8e3" opacity="0.8"/>
+        <rect x="60" y="56" width="12" height="12" fill="#7ec8e3" opacity="0.8"/>
+        <!-- 右侧房子 -->
+        <rect x="510" y="52" width="70" height="38" fill="#5a3a1a"/>
+        <rect x="504" y="40" width="82" height="16" fill="#7a1a2a"/>
+        <rect x="498" y="36" width="94" height="8"  fill="#5a0a1a"/>
+        <rect x="526" y="68" width="18" height="22" fill="#3a2010"/>
+        <rect x="514" y="54" width="14" height="14" fill="#7ec8e3" opacity="0.8"/>
+        <rect x="542" y="54" width="14" height="14" fill="#7ec8e3" opacity="0.8"/>
+        <!-- 左侧树 -->
+        <rect x="180" y="54" width="8" height="30" fill="#5a3a1a"/>
+        <rect x="166" y="36" width="36" height="22" fill="#2a5a1a"/>
+        <rect x="160" y="42" width="48" height="18" fill="#3a7a2a"/>
+        <rect x="170" y="38" width="28" height="8"  fill="#4a8a3a"/>
+        <!-- 右侧树 -->
+        <rect x="412" y="54" width="8" height="30" fill="#5a3a1a"/>
+        <rect x="398" y="36" width="36" height="22" fill="#2a5a1a"/>
+        <rect x="392" y="42" width="48" height="18" fill="#3a7a2a"/>
+        <rect x="402" y="38" width="28" height="8"  fill="#4a8a3a"/>
+        <!-- 花朵 -->
+        <rect x="100" y="80" width="6" height="6"  fill="#ff9090"/>
+        <rect x="114" y="82" width="6" height="6"  fill="#ff6090"/>
+        <rect x="128" y="79" width="6" height="6"  fill="#ffd070"/>
+        <rect x="466" y="80" width="6" height="6"  fill="#ff90c0"/>
+        <rect x="480" y="82" width="6" height="6"  fill="#ff6090"/>
+        <rect x="494" y="79" width="6" height="6"  fill="#ffb050"/>
+        <!-- 路上的人物像素（新郎新娘）-->
+        <!-- 新娘（白色像素人） -->
+        <rect x="270" y="92" width="10" height="10" fill="#f5d0b0"/><!-- 头 -->
+        <rect x="272" y="94" width="2"  height="2"  fill="#6a3a1a"/><!-- 眼 -->
+        <rect x="276" y="94" width="2"  height="2"  fill="#6a3a1a"/>
+        <rect x="268" y="102" width="14" height="18" fill="#fff"/>   <!-- 婚纱 -->
+        <rect x="264" y="102" width="6"  height="12" fill="#fff"/>   <!-- 裙摆 -->
+        <rect x="280" y="102" width="6"  height="12" fill="#fff"/>
+        <rect x="270" y="118" width="4"  height="6"  fill="#d4a0a0"/><!-- 腿 -->
+        <rect x="276" y="118" width="4"  height="6"  fill="#d4a0a0"/>
+        <!-- 新郎（深色像素人） -->
+        <rect x="318" y="92" width="10" height="10" fill="#f0c8a0"/><!-- 头 -->
+        <rect x="320" y="94" width="2"  height="2"  fill="#4a2a0a"/><!-- 眼 -->
+        <rect x="324" y="94" width="2"  height="2"  fill="#4a2a0a"/>
+        <rect x="316" y="102" width="14" height="18" fill="#2a3a6a"/><!-- 礼服 -->
+        <rect x="316" y="102" width="5"  height="8"  fill="#eee"/>   <!-- 白衬衫 -->
+        <rect x="318" y="118" width="4"  height="6"  fill="#3a2a1a"/><!-- 腿 -->
+        <rect x="324" y="118" width="4"  height="6"  fill="#3a2a1a"/>
+        <!-- 连心线 -->
+        <rect x="280" y="96" width="38" height="2"  fill="#ff6090" opacity="0.6"/>
+        <rect x="296" y="90" width="8"  height="10" fill="#ff6090" opacity="0.4"/>
+      </svg>
+    </div>
+
+    <!-- ===== 标题 ===== -->
+    <div class="title-section">
+      <span class="invite-label">✦ 诚挚邀请 ✦</span>
+      <div class="names-container">
+        <span class="groom-name">陈志鹏</span>
+        <span class="heart-connector">💕</span>
+        <span class="bride-name">李晓敏</span>
+      </div>
+      <div class="pixel-divider">
+        <span class="line"></span>
+        <span class="diamond"></span>
+        <span style="color:var(--sdv-gold);font-size:13px;letter-spacing:3px;padding:0 8px;">WEDDING</span>
+        <span class="diamond"></span>
+        <span class="line"></span>
+      </div>
+    </div>
+
+    <!-- ===== 婚礼信息 ===== -->
+    <div class="info-section">
+      <div class="info-block date-block">
+        <span class="info-icon">📅</span>
+        <div class="info-content">
+          <span class="info-label">婚礼日期</span>
+          <div class="info-value">2026年11月14日</div>
+          <div class="info-sub">星期六 · 秋季第14天 🍂</div>
+        </div>
+      </div>
+
+      <div class="info-block loc-block">
+        <span class="info-icon">🏰</span>
+        <div class="info-content">
+          <span class="info-label">婚礼地点</span>
+          <div class="info-value">万达嘉华酒店</div>
+          <div class="info-sub">河北省承德市</div>
+        </div>
+      </div>
+
+      <div class="info-block">
+        <span class="info-icon">⏰</span>
+        <div class="info-content">
+          <span class="info-label">婚宴时间</span>
+          <div class="info-value">中午 11:30 迎宾</div>
+          <div class="info-sub">请提前莅临，共享美好时光</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 美人鱼吊坠引言 -->
+    <div class="mid-deco">
+      <div class="mermaid-pendant">
+        🐚 &nbsp;"用美人鱼吊坠定下的誓约，是星露谷最古老的爱情传统"&nbsp; 🐚
+      </div>
+    </div>
+
+    <!-- ===== 邀请信正文 ===== -->
+    <div class="body-section">
+      <p class="letter-text">
+        在这金秋丰收的美好时节，<br>
+        <span class="highlight">陈志鹏</span> 与 <span class="highlight">李晓敏</span><br>
+        怀着满满的喜悦与感恩，<br>
+        诚邀您见证我们携手一生的美好时刻。
+      </p>
+
+      <!-- 游戏风格物品展示 -->
+      <div class="item-cards">
+        <div class="item-card" data-quality="💎">
+          <span class="emoji">💍</span>
+          <div class="item-name">美人鱼吊坠</div>
+          <div class="item-desc">永恒誓约之证</div>
+        </div>
+        <div class="item-card" data-quality="★★★">
+          <span class="emoji">💐</span>
+          <div class="item-name">花束</div>
+          <div class="item-desc">爱意初萌之礼</div>
+        </div>
+        <div class="item-card" data-quality="★★★">
+          <span class="emoji">🌹</span>
+          <div class="item-name">古老玫瑰</div>
+          <div class="item-desc">七年守候之花</div>
+        </div>
+        <div class="item-card" data-quality="★★">
+          <span class="emoji">🍰</span>
+          <div class="item-name">婚礼蛋糕</div>
+          <div class="item-desc">甜蜜共享之味</div>
+        </div>
+      </div>
+
+      <p class="letter-text">
+        婚礼当天，天气将晴空万里☀️，<br>
+        一如我们对未来的期许——<br>
+        愿与君共度每一个春耕秋收，<br>
+        岁月静好，携手至终。
+      </p>
+    </div>
+
+    <!-- ===== 出席确认 ===== -->
+    <div class="cta-section">
+      <div class="rsvp-box">
+        <div class="rsvp-title">✉️ 出席确认</div>
+        <p class="rsvp-text">
+          您的到来是对我们最好的祝福。<br>
+          如您确认出席，请联系我们：<br><br>
+          <strong style="color:var(--sdv-light);">📱 新郎：陈志鹏</strong><br>
+          <strong style="color:var(--sdv-light);">📱 新娘：李晓敏</strong>
+        </p>
+        <a class="pixel-btn" href="tel:">📞 联系我们</a>
+      </div>
+
+      <!-- 地图按钮 -->
+      <a class="pixel-btn" style="background:#7a4a2a;box-shadow:4px 4px 0 #3a2010;width:100%;display:block;text-align:center;"
+         href="https://maps.apple.com/?q=万达嘉华酒店+承德" target="_blank" rel="noopener">
+        🗺️ &nbsp;查看地图导航
+      </a>
+    </div>
+
+    <!-- ===== 底部署名 ===== -->
+    <div class="footer-sign">
+      <div class="sign-names">❤️ 陈志鹏 & 李晓敏 ❤️</div>
+      <div class="sign-date">2026 · 秋 · 承德</div>
+      <div class="junimo-row">
+        <span class="junimo">🟢</span>
+        <span class="junimo">🔴</span>
+        <span class="junimo">🟡</span>
+        <span class="junimo">🔵</span>
+        <span class="junimo">🟣</span>
+      </div>
+      <div style="margin-top:10px;font-size:11px;color:#5a4a30;letter-spacing:1px;">
+        PELICAN TOWN · STARDEW VALLEY · YEAR 1
+      </div>
+    </div>
+
+  </div><!-- /invite-card -->
+</div><!-- /wrapper -->
+
+<script>
+// 生成星星
+(function() {
+  const container = document.getElementById('starsContainer');
+  const count = 60;
+  for (let i = 0; i < count; i++) {
+    const star = document.createElement('div');
+    star.className = 'star';
+    star.style.left = Math.random() * 100 + '%';
+    star.style.top  = Math.random() * 100 + '%';
+    star.style.animationDelay = (Math.random() * 3) + 's';
+    star.style.animationDuration = (1.5 + Math.random() * 2) + 's';
+    star.style.opacity = 0.2 + Math.random() * 0.6;
+    container.appendChild(star);
+  }
+})();
+
+// 生成飘落花瓣
+(function() {
+  const container = document.getElementById('petalsContainer');
+  const petals = ['🌸', '🌺', '🌼', '✿', '❀'];
+  const count = 18;
+  for (let i = 0; i < count; i++) {
+    const p = document.createElement('div');
+    p.className = 'petal';
+    p.textContent = petals[Math.floor(Math.random() * petals.length)];
+    p.style.left = Math.random() * 100 + '%';
+    p.style.animationDuration = (6 + Math.random() * 10) + 's';
+    p.style.animationDelay = (Math.random() * 12) + 's';
+    p.style.fontSize = (10 + Math.random() * 8) + 'px';
+    container.appendChild(p);
+  }
+})();
+</script>
+</body>
+</html>
