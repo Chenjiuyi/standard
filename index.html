@@ -184,12 +184,11 @@ html,body{
   content:'';position:absolute;inset:0;
   background:repeating-linear-gradient(45deg,rgba(0,0,0,.04),rgba(0,0,0,.04) 2px,transparent 2px,transparent 8px);
 }
-.char-wiki-img{
-  image-rendering:pixelated;
+.char-photo{
   position:relative;z-index:1;
-  /* 使用 wiki 上的真实角色图 */
-  width:auto;height:140px;
-  object-fit:contain;
+  width:100%;height:100%;
+  object-fit:cover;
+  display:block;
 }
 .char-label{
   background:linear-gradient(180deg,#f0d060,#d4a030);
@@ -320,9 +319,40 @@ html,body{
   10%{opacity:.8;}90%{opacity:.6;}
   100%{transform:translateY(106vh) rotate(540deg) translateX(30px);opacity:0;}
 }
+
+/* ========== BGM 音乐开关（旋转唱片） ========== */
+.bgm-btn{
+  position:fixed;top:14px;right:14px;z-index:1000;
+  width:46px;height:46px;border-radius:50%;
+  background:radial-gradient(circle at 50% 50%,#3a2410 0 30%,#1a0f04 31% 100%);
+  border:2px solid #d9903e;
+  box-shadow:0 2px 8px rgba(0,0,0,.5),inset 0 0 0 5px #2a1a0a;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  -webkit-tap-highlight-color:transparent;
+}
+/* 唱片中心孔与高光 */
+.bgm-btn::before{
+  content:'';width:10px;height:10px;border-radius:50%;
+  background:#d9903e;box-shadow:0 0 0 2px #7a4410;
+}
+.bgm-btn .note{
+  position:absolute;font-size:17px;line-height:1;
+  filter:drop-shadow(0 1px 1px rgba(0,0,0,.6));
+}
+.bgm-btn.playing{animation:bgm-spin 3.2s linear infinite;}
+@keyframes bgm-spin{to{transform:rotate(360deg);}}
+/* 暂停时显示斜杠遮罩 */
+.bgm-btn.paused .note{opacity:.45;}
+.bgm-btn.paused::after{
+  content:'';position:absolute;width:2px;height:34px;background:#e05050;
+  transform:rotate(45deg);border-radius:2px;
+  box-shadow:0 0 2px rgba(0,0,0,.6);
+}
 </style>
 </head>
 <body>
+<audio id="bgm" src="assets/audio/theme.mp3" loop preload="auto"></audio>
+<div class="bgm-btn paused" id="bgmBtn" title="播放/暂停音乐"><span class="note">🎵</span></div>
 <div class="petal-wrap" id="petalWrap"></div>
 <div class="page">
 
@@ -400,26 +430,21 @@ html,body{
     </div>
   </div>
 
-  <!-- ===== 角色卡片（使用 Wiki 真实角色图） ===== -->
+  <!-- ===== 角色卡片（新郎新娘真实照片） ===== -->
   <div class="chars-section">
-    <!-- 新郎：使用亚历克斯（帅气男性角色）图 -->
     <div class="char-card">
       <div class="char-portrait">
-        <!-- Wiki 里婚礼场景截图，或角色全身图 -->
-        <img class="char-wiki-img"
-          src="assets/img/Alex.png"
-          alt="新郎"
-          onerror="this.style.display='none'"/>
+        <img class="char-photo"
+          src="assets/img/新郎.jpg"
+          alt="新郎"/>
       </div>
       <div class="char-label">新郎：陈志鹏</div>
     </div>
-    <!-- 新娘：使用艾米丽（穿婚纱女性角色）图 -->
     <div class="char-card">
       <div class="char-portrait">
-        <img class="char-wiki-img"
-          src="assets/img/Emily.png"
-          alt="新娘"
-          onerror="this.style.display='none'"/>
+        <img class="char-photo"
+          src="assets/img/新娘.jpg"
+          alt="新娘"/>
       </div>
       <div class="char-label">新娘：李晓敏</div>
     </div>
@@ -503,7 +528,7 @@ html,body{
       <img src="assets/img/Marriage_Icon.png" alt=""/>
       <img src="assets/img/Junimo_Icon.png" alt=""/>
       <img src="assets/img/Robin_Icon.png" alt=""/>
-      <img src="assets/img/Emily.png" alt="" style="width:32px;height:32px;"/>
+      <img src="assets/img/WeddingDayHeart.png" alt="" style="width:32px;height:32px;image-rendering:pixelated;"/>
     </div>
     <div style="margin-top:10px;font-size:11px;color:#7a5020;letter-spacing:1px;">
       PELICAN TOWN · STARDEW VALLEY · YEAR 1
@@ -526,6 +551,47 @@ html,body{
     el.style.animationDelay=(Math.random()*14)+'s';
     wrap.appendChild(el);
   }
+})();
+
+/* ===== BGM：微信自动播放 + 首次交互兜底 + 唱片开关 ===== */
+(function(){
+  const audio = document.getElementById('bgm');
+  const btn   = document.getElementById('bgmBtn');
+  audio.volume = 0.6;
+
+  function sync(){
+    const playing = !audio.paused && !audio.ended;
+    btn.classList.toggle('playing', playing);
+    btn.classList.toggle('paused', !playing);
+  }
+  function play(){ return audio.play().then(sync).catch(()=>{}); }
+
+  // 1) 微信内置浏览器：JSBridge 就绪后可直接播放
+  function tryWeixin(){
+    if(window.WeixinJSBridge){
+      window.WeixinJSBridge.invoke('getNetworkType', {}, play);
+    }
+  }
+  if(window.WeixinJSBridge){ tryWeixin(); }
+  else{ document.addEventListener('WeixinJSBridgeReady', tryWeixin, false); }
+
+  // 2) 普通浏览器：尝试直接播放，被拦则等用户首次交互
+  play();
+  function onFirst(){
+    play();
+    ['touchstart','click','scroll'].forEach(ev=>
+      document.removeEventListener(ev, onFirst));
+  }
+  ['touchstart','click','scroll'].forEach(ev=>
+    document.addEventListener(ev, onFirst, {once:false, passive:true}));
+
+  // 3) 唱片按钮：手动暂停/播放（阻止冒泡，避免触发兜底逻辑）
+  btn.addEventListener('click', function(e){
+    e.stopPropagation();
+    if(audio.paused){ play(); } else { audio.pause(); sync(); }
+  });
+  audio.addEventListener('play', sync);
+  audio.addEventListener('pause', sync);
 })();
 </script>
 </body>
