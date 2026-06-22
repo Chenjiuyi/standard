@@ -4,6 +4,9 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <title>💍 陈志鹏 & 李晓敏 婚礼邀请函</title>
+<link rel="preload" as="image" href="assets/img/Marriage_abigail.png" fetchpriority="high"/>
+<link rel="preload" as="image" href="assets/img/%E6%96%B0%E9%83%8E.jpg"/>
+<link rel="preload" as="image" href="assets/img/%E6%96%B0%E5%A8%98.jpg"/>
 <style>
 @font-face{
   font-family:'ZCOOL KuaiLe';
@@ -387,6 +390,7 @@ html,body{
     <!-- 婚礼截图：与阿比盖尔的婚礼场景截图，呈现拱门婚礼氛围 -->
     <img class="wiki-wedding-img"
       src="assets/img/Marriage_abigail.png"
+      fetchpriority="high"
       alt="婚礼场景"/>
     <!-- 道具图标装饰行 -->
     <div class="items-row">
@@ -420,6 +424,8 @@ html,body{
       <div class="char-portrait">
         <img class="char-photo"
           src="assets/img/新郎.jpg"
+          width="1254" height="1254"
+          fetchpriority="high"
           alt="新郎"/>
       </div>
       <div class="char-label">新郎：陈志鹏</div>
@@ -428,6 +434,8 @@ html,body{
       <div class="char-portrait">
         <img class="char-photo"
           src="assets/img/新娘.jpg"
+          width="1254" height="1254"
+          fetchpriority="high"
           alt="新娘"/>
       </div>
       <div class="char-label">新娘：李晓敏</div>
@@ -605,7 +613,9 @@ html,body{
     requestAnimationFrame(step);
   }
 
-  function stop(){
+  function stop(e){
+    // 点击 BGM 唱片开关不应停止滚动
+    if(e && e.target && e.target.closest && e.target.closest('#bgmBtn')) return;
     auto = false;
     ['touchstart','wheel','keydown'].forEach(ev=>
       window.removeEventListener(ev, stop));
