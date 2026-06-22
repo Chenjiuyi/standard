@@ -365,7 +365,7 @@ html,body{
 </style>
 </head>
 <body>
-<audio id="bgm" src="assets/audio/theme.mp3" loop preload="auto"></audio>
+<audio id="bgm" src="assets/audio/theme.mp3" loop preload="none"></audio>
 <div class="bgm-btn paused" id="bgmBtn" title="播放/暂停音乐"><span class="note">🎵</span></div>
 <div class="petal-wrap" id="petalWrap"></div>
 <div class="page">
@@ -572,17 +572,21 @@ html,body{
   }
   function play(){ return audio.play().then(sync).catch(()=>{}); }
 
-  // 1) 微信内置浏览器：JSBridge 就绪后可直接播放
-  function tryWeixin(){
-    if(window.WeixinJSBridge){
-      window.WeixinJSBridge.invoke('getNetworkType', {}, play);
+  // 主动播放（微信自动播 + 普通浏览器尝试播）推迟到首屏加载完，避免抢图片带宽
+  function startBgm(){
+    function tryWeixin(){
+      if(window.WeixinJSBridge){
+        window.WeixinJSBridge.invoke('getNetworkType', {}, play);
+      }
     }
+    if(window.WeixinJSBridge){ tryWeixin(); }
+    else{ document.addEventListener('WeixinJSBridgeReady', tryWeixin, false); }
+    play();
   }
-  if(window.WeixinJSBridge){ tryWeixin(); }
-  else{ document.addEventListener('WeixinJSBridgeReady', tryWeixin, false); }
+  if(document.readyState === 'complete'){ startBgm(); }
+  else{ window.addEventListener('load', startBgm); }
 
-  // 2) 普通浏览器：尝试直接播放，被拦则等用户首次交互
-  play();
+  // 用户首次交互即播放（即时生效，不等首屏；用户想听不该被推迟）
   function onFirst(){
     play();
     ['touchstart','click','scroll'].forEach(ev=>
@@ -591,7 +595,7 @@ html,body{
   ['touchstart','click','scroll'].forEach(ev=>
     document.addEventListener(ev, onFirst, {once:false, passive:true}));
 
-  // 3) 唱片按钮：手动暂停/播放（阻止冒泡，避免触发兜底逻辑）
+  // 唱片按钮：手动暂停/播放（阻止冒泡，避免触发兜底逻辑）
   btn.addEventListener('click', function(e){
     e.stopPropagation();
     if(audio.paused){ play(); } else { audio.pause(); sync(); }
@@ -644,16 +648,9 @@ html,body{
     e.preventDefault();
     e.stopPropagation();
     const kw = encodeURIComponent(KEYWORD);
-    const ua = navigator.userAgent || '';
-    let url;
-    if(/iPhone|iPad|iPod|Macintosh/i.test(ua)){
-      // iOS / Mac：苹果地图搜索
-      url = 'https://maps.apple.com/?q=' + kw;
-    }else{
-      // Android 及其他：高德网页/唤端搜索（含城市更精准）
-      url = 'https://uri.amap.com/search?keyword=' + kw
-          + '&city=' + encodeURIComponent(CITY) + '&src=wedding&coordinate=gaode';
-    }
+    // 统一跳转高德地图（有 app 唤起 app，否则打开网页）搜索
+    const url = 'https://uri.amap.com/search?keyword=' + kw
+        + '&city=' + encodeURIComponent(CITY) + '&src=wedding&coordinate=gaode';
     window.open(url, '_blank');
   });
 })();
