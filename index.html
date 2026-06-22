@@ -256,6 +256,12 @@ html,body{
 .info-label{font-size:12px;color:#6a3a00;font-weight:bold;letter-spacing:1px;display:block;}
 .info-value{font-size:clamp(15px,4vw,18px);color:#2a0a00;font-weight:bold;line-height:1.4;}
 .info-sub{font-size:12px;color:#8a5020;margin-top:2px;}
+.map-link{
+  color:#8a1a00;text-decoration:underline;
+  text-decoration-color:rgba(138,26,0,.5);
+  text-underline-offset:3px;cursor:pointer;
+  -webkit-tap-highlight-color:rgba(138,26,0,.15);
+}
 .divider{border:none;border-top:2px dashed #c09040;margin:12px 0;}
 .parchment-body{
   font-size:clamp(13px,3.5vw,15px);color:#4a2000;
@@ -484,8 +490,8 @@ html,body{
           src="assets/img/Railroad_Icon.png" alt=""/>
         <div class="info-content">
           <span class="info-label">婚礼地点：</span>
-          <div class="info-value">万达嘉华酒店</div>
-          <div class="info-sub">河北省承德市</div>
+          <div class="info-value">承德金宝万达嘉华酒店</div>
+          <div class="info-sub">河北省承德市 · <a class="map-link" href="#" id="mapLink">点击导航 ›</a></div>
         </div>
       </div>
 
@@ -625,6 +631,31 @@ html,body{
     window.addEventListener(ev, stop, {passive:true}));
 
   setTimeout(()=>{ if(auto) requestAnimationFrame(step); }, START_DELAY);
+})();
+
+/* ===== 点击酒店名跳转地图并搜索 ===== */
+(function(){
+  const link = document.getElementById('mapLink');
+  if(!link) return;
+  const KEYWORD = '承德金宝万达嘉华酒店';
+  const CITY = '承德';
+
+  link.addEventListener('click', function(e){
+    e.preventDefault();
+    e.stopPropagation();
+    const kw = encodeURIComponent(KEYWORD);
+    const ua = navigator.userAgent || '';
+    let url;
+    if(/iPhone|iPad|iPod|Macintosh/i.test(ua)){
+      // iOS / Mac：苹果地图搜索
+      url = 'https://maps.apple.com/?q=' + kw;
+    }else{
+      // Android 及其他：高德网页/唤端搜索（含城市更精准）
+      url = 'https://uri.amap.com/search?keyword=' + kw
+          + '&city=' + encodeURIComponent(CITY) + '&src=wedding&coordinate=gaode';
+    }
+    window.open(url, '_blank');
+  });
 })();
 </script>
 </body>
